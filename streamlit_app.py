@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 from util import read_data, calculate_budget, formated_budget, add_data
- 
+# setting float
+pd.options.display.float_format = '{:,.0f}'.format
 st.title("Budget Saham Management")
 
 # Sidebar form for data entry
