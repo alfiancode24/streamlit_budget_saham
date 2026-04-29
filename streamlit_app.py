@@ -52,7 +52,7 @@ data_display = data_display[[
         "BuyHigh",
         "TotalBudget",
         "EstimationBudget"
-    ]]
+    ]].sort_values("CodeStock")
 
 budget_display = formated_budget(data_display)
 st.markdown(
