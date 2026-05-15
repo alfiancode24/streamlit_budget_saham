@@ -12,6 +12,16 @@ def read_data():
     sheet = sheet.dropna(how="all")
     return sheet
 
+def set_persen():
+    # Connect to the Google Sheet
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    # Connect Sheet
+    persen = conn.read(worksheet="setting", usecols=list(range(6)), ttl=5)
+    persen = persen.dropna(how="all")
+    persen = persen.iloc[0,0]/100
+    persen_target = 1 - persen
+    return persen_target
+
 def get_price(ticker):
     try:
         stock = yf.Ticker(ticker)
@@ -25,7 +35,7 @@ def calculate_budget(data):
     data["CurrentPrice"] = data["CodeStock"].apply(get_price)
     
     # target price
-    data["TargetPrice"] = data["CurrentPrice"] * 0.97
+    data["TargetPrice"] = data["CurrentPrice"] * set_persen()
 
     # Condition
     condition = (

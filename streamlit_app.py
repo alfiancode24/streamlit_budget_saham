@@ -1,12 +1,22 @@
 import streamlit as st
 import pandas as pd
-from util import read_data, calculate_budget, formated_budget, add_data
+from util import read_data, calculate_budget, formated_budget, add_data, set_persen
 # setting float
 pd.options.display.float_format = '{:,.0f}'.format
 st.title("Budget Saham Management")
 
 # Sidebar form for data entry
 with st.sidebar:
+    # option
+    action = st.selectbox(
+        "Choose an Action",
+        [
+            "Input New Stock",
+            "Update Stock",
+            "Delete Stock",
+            "Setting %"
+        ],
+    )
     st.header("Enter New Stock")
     with st.form(key="data_form"):
         code_stock = st.text_input(label="Kode Saham").upper()
