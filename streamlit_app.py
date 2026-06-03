@@ -53,7 +53,40 @@ with st.sidebar:
                     data = read_data()
                     add_data(input_data,data)
                 st.success("New Stock successfully submitted!")
-
+    elif action == "Update Stock":
+        st.header("Update Stock")
+        data = read_data()
+        stock_to_update = st.selectbox("Select a Stock to Update", options=data["CodeStock"].tolist())
+        stock_data = data[data["CodeStock"] == stock_to_update].iloc[0]
+        with st.form(key="data_form"):
+            buy_low = st.number_input(label="Buy Low*", min_value=0, step=1,value=int(stock_data["BuyLow"]))
+            buy_high = st.number_input(label="Buy High*", min_value=0, step=1, value=int(stock_data["BuyHigh"]))
+            total_budget = st.number_input(label="Total Budget*", min_value=0, step=1, value=int(stock_data["TotalBudget"]))
+            update_submitted = st.form_submit_button("Submit")
+            # Handle From Submisson
+            if update_submitted:
+                # Validate
+                if buy_low <= 0 or buy_low <= 0 or total_budget <= 0 :
+                    st.warning("Price or Budget dont 0")
+                    st.stop()
+                elif buy_low > buy_high:
+                    st.warning("Buy High Must Bigger Thab Buy Low")
+                    st.stop()
+                else:
+                     # Removing old entry
+                    data.drop(data[data["CodeStock"] == stock_to_update].index,inplace=True)
+                    # Create a new row of vendor data
+                    input_data = pd.DataFrame(
+                        [
+                            {
+                                "BuyLow": buy_low,
+                                "BuyHigh" : buy_high,
+                                "TotalBudget" : total_budget
+                            }
+                        ]
+                    )
+                    add_data(input_data,data)
+                st.success("Update Stock successfully submitted!")
 # Display data
 data = read_data()
 data_display = calculate_budget(data)
