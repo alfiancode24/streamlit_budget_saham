@@ -18,40 +18,41 @@ with st.sidebar:
             "Setting %"
         ],
     )
-    st.header("Enter New Stock")
-    with st.form(key="data_form"):
-        code_stock = st.text_input(label="Kode Saham").upper()
-        buy_low = st.number_input(label="Buy Low*", min_value=0, value=0, step=1)
-        buy_high = st.number_input(label="Buy High*", min_value=0, value=0, step=1)
-        total_budget = st.number_input(label="Total Budget*", min_value=0, value=0, step=1)
-        submitted = st.form_submit_button("Submit")
-        # Handle From Submisson
-        if submitted:
-            # Validate
-            if not code_stock:
-                st.warning("Fill Code Stock")
-                st.stop()
-            elif buy_low <= 0 or buy_low <= 0 or total_budget <= 0 :
-                st.warning("Price or Budget dont 0")
-                st.stop()
-            elif buy_low > buy_high:
-                st.warning("Buy High Must Bigger Thab Buy Low")
-                st.stop()
-            else:
-                # Create a new row of vendor data
-                input_data = pd.DataFrame(
-                    [
-                        {
-                            "CodeStock": code_stock+".JK",
-                            "BuyLow": buy_low,
-                            "BuyHigh" : buy_high,
-                            "TotalBudget" : total_budget
-                        }
-                    ]
-                )
-                data = read_data()
-                add_data(input_data,data)
-            st.success("New Stock successfully submitted!")
+    if action == "Input New Stock":
+        st.header("Enter New Stock")
+        with st.form(key="data_form"):
+            code_stock = st.text_input(label="Kode Saham").upper()
+            buy_low = st.number_input(label="Buy Low*", min_value=0, value=0, step=1)
+            buy_high = st.number_input(label="Buy High*", min_value=0, value=0, step=1)
+            total_budget = st.number_input(label="Total Budget*", min_value=0, value=0, step=1)
+            submitted = st.form_submit_button("Submit")
+            # Handle From Submisson
+            if submitted:
+                # Validate
+                if not code_stock:
+                    st.warning("Fill Code Stock")
+                    st.stop()
+                elif buy_low <= 0 or buy_low <= 0 or total_budget <= 0 :
+                    st.warning("Price or Budget dont 0")
+                    st.stop()
+                elif buy_low > buy_high:
+                    st.warning("Buy High Must Bigger Thab Buy Low")
+                    st.stop()
+                else:
+                    # Create a new row of vendor data
+                    input_data = pd.DataFrame(
+                        [
+                            {
+                                "CodeStock": code_stock+".JK",
+                                "BuyLow": buy_low,
+                                "BuyHigh" : buy_high,
+                                "TotalBudget" : total_budget
+                            }
+                        ]
+                    )
+                    data = read_data()
+                    add_data(input_data,data)
+                st.success("New Stock successfully submitted!")
 
 # Display data
 data = read_data()
