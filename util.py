@@ -65,3 +65,9 @@ def add_data(input_data,data):
 
     # Update to Gsheet
     conn.update(worksheet="budget_saham", data=update_data)
+
+def read(data):
+    conn = st.connection("gsheets", type=GSheetsConnection)
+
+    # Update to Gsheet
+    conn.update(worksheet="budget_saham", data=data)

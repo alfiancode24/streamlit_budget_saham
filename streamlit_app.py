@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from util import read_data, calculate_budget, formated_budget, add_data, set_persen
+from util import read_data, calculate_budget, formated_budget, add_data, set_persen,read
 # setting float
 pd.options.display.float_format = '{:,.0f}'.format
 st.title("Budget Saham Management")
@@ -62,7 +62,7 @@ with st.sidebar:
             buy_low = st.number_input(label="Buy Low*", min_value=0, step=1,value=int(stock_data["BuyLow"]))
             buy_high = st.number_input(label="Buy High*", min_value=0, step=1, value=int(stock_data["BuyHigh"]))
             total_budget = st.number_input(label="Total Budget*", min_value=0, step=1, value=int(stock_data["TotalBudget"]))
-            update_submitted = st.form_submit_button("Submit")
+            update_submitted = st.form_submit_button("Update")
             # Handle From Submisson
             if update_submitted:
                 # Validate
@@ -79,6 +79,7 @@ with st.sidebar:
                     input_data = pd.DataFrame(
                         [
                             {
+                                "CodeStock": stock_data["CodeStock"],
                                 "BuyLow": buy_low,
                                 "BuyHigh" : buy_high,
                                 "TotalBudget" : total_budget
@@ -87,6 +88,19 @@ with st.sidebar:
                     )
                     add_data(input_data,data)
                 st.success("Update Stock successfully submitted!")
+    elif action == "Delete Stock":
+        st.header("Delete Stock")
+        data = read_data()
+        stock_to_delete = st.selectbox("Select a Vendor to Delete", options=data["CodeStock"].tolist())
+
+        if st.button("Delete"):
+            data.drop(
+                data[data["CodeStock"] == stock_to_delete].index,
+                inplace=True,
+            )
+            read(data)
+            st.success("Stock successfully deleted!")
+
 # Display data
 data = read_data()
 data_display = calculate_budget(data)
