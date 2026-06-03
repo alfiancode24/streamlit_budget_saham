@@ -5,6 +5,7 @@ from util import read_data, calculate_budget, formated_budget, add_data, set_per
 pd.options.display.float_format = '{:,.0f}'.format
 st.title("Budget Saham Management")
 
+tab1, tab2 = st.tabs(["Summary", "All"])
 # Sidebar form for data entry
 with st.sidebar:
     # option
@@ -70,4 +71,14 @@ st.markdown(
     f"Estimation Budget : <span style='color:green'>Rp {budget_display}</span>",
     unsafe_allow_html=True
 )
-st.dataframe(data_display)
+
+with tab1:
+    data_summary = data_display[[
+        "CodeStock",
+        "EstimationBudget"
+    ]].sort_values("CodeStock")
+    st.dataframe(data_summary)
+
+with tab2:
+    st.dataframe(data_display)
+
